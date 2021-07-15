@@ -5,22 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Still thinking...</title>
   <!-- STYLES -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" 
-        rel="stylesheet"
-        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" 
-        crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic.min.css">
+  <link 
+    rel="stylesheet" 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" 
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" 
+    crossorigin="anonymous">
+  <link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic.min.css">
+
   <link rel="stylesheet" href="css/style.css">
+
   <!-- SCRIPTS -->
-  <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
-  <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.4.5/jscolor.min.js"></script>
+  <script type="module"
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" 
+    crossorigin="anonymous"></script>
+  <script type="module" 
+    src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.4.5/jscolor.min.js"></script>
+
   <script type="module" src="./js/script.js"></script>
-  
 </head>
 
 <body>
   <div id="main-container">
-    <div id="title" class="bordered DarkViolet">
+    <div id="title">
       <p class="fs-1">Still thinking about the name</p>
       <p class="fs-6">Inspired by xsaardo's
         <a  href="https://github.com/xsaardo/Album-Art-Collage-Creator" 
@@ -30,7 +39,7 @@
         </a>
       </p>
     </div>
-    <div id="options-container" class="bordered chocolate">
+    <div id="options-container">
       <form class="mx-3">
         <!-- IMAGE-BG -->
         <div class="mb-3 text-center">
@@ -39,7 +48,7 @@
             <input type="url" class="form-control" id="bg-img-url-input">
             <span class="input-group-text">Repeat?</span>
             <div class="input-group-text">
-              <input id="bg-repeat-chk" class="form-check-input" type="checkbox">
+              <input id="bg-img-repeat-chk" class="form-check-input" type="checkbox">
             </div>
           </div>
         </div>
@@ -56,13 +65,13 @@
         <div class="d-flex justify-content-center mb-3">
           <div class="input-group flex-nowrap w-auto">
             <button id="col-num-btn-minus" class="btn btn-danger" type="button"><span class="oi" data-glyph="minus"></span></button>
-            <input type="text" id="col-num" class="text-center" value="COLS" data-value="3" readonly>
+            <input type="text" id="col-num" class="text-center" value="COLS" data-value="4" readonly>
             <button id="col-num-btn-plus" class="btn btn-success" type="button"><span class="oi" data-glyph="plus"></span></button>
           </div>
           <div class="mx-1"></div>
           <div class="input-group flex-nowrap w-auto">
             <button id="row-num-btn-minus" class="btn btn-danger" type="button"><span class="oi" data-glyph="minus"></span></button>
-            <input type="text" id="row-num" class="text-center" value="ROWS" data-value="3" readonly>
+            <input type="text" id="row-num" class="text-center" value="ROWS" data-value="4" readonly>
             <button id="row-num-btn-plus" class="btn btn-success" type="button"><span class="oi" data-glyph="plus"></span></button>
           </div>
         </div>
@@ -71,13 +80,13 @@
         <div class="mb-3 text-center d-flex " id="imgsize-gutter-container">
           <!-- IMG SIZE -->
           <div>
-            <label for="img-size" class="form-label text-center">Image size (<span id="img-size-span">100</span></label>px)
+            <label for="img-size" class="form-label text-center">Image size (<span id="img-size-span"></span></label>px)
             <input type="range" class="form-range" id="img-size" min="100" max="300" step="1" value="100">
           </div>
           <div class="mx-1"></div>
           <!-- GUTTER -->
           <div>
-            <label for="gutter" class="form-label text-center">Gutter (<span id="gutter-span">0</span>px)</label>
+            <label for="gutter" class="form-label text-center">Gutter (<span id="gutter-span"></span>px)</label>
             <input type="range" class="form-range" id="gutter" min="0" max="10" value="0">
           </div>
         </div>
@@ -90,16 +99,70 @@
           </div>
         </div>
 
-        
+        <!-- RANK/ALBUM TITLES -->
+        <div class="text-center">
+          <div class="mb-2 d-inline-flex justify-content-center">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="rank-switch">
+              <label class="form-check-label" for="rank-switch">Show ranks</label>
+            </div>
+            <span class="mx-3"></span>
+            <div class="form-check form-switch d-flex align-items-center">
+              <input class="form-check-input" type="checkbox" id="title-switch">
+              <label class="form-check-label" for="title-switch">Show titles</label>
+            </div>
+          </div>
+        </div>
 
+        <!-- TITLE POSITION -->
+        <div id="title-position-options" class="d-flex justify-content-end">
+          <!-- BELOW -->
+          <div class="form-check form-check-inline">
+            <label class="form-check-label" for="title-below-radio">
+              Show below
+            </label>
+            <input class="form-check-input" type="radio" name="title-position" id="title-below-radio">
+          </div>
+          <!-- SIDE -->
+          <div class="form-check form-check-inline">
+            <label class="form-check-label" for="title-side-radio">
+              Show on side
+            </label>
+            <input class="form-check-input" type="radio" name="title-position" id="title-side-radio">
+          </div>
+        </div>
       </form>
+
     </div>
-    <div id="chart-container" class="bordered CornflowerBlue">
-      <div id="chart" class="bordered CornflowreBlue">
+    <div id="chart-container">
+      <div id="chart">
         <div id="chart-title"></div>
         <div id="chart-covers"></div>
+        <div id="side-titles" class="side-titles"></div>
       </div>
     </div>
   </div>
+
+  <!-- MODAL -->
+  <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content dark">
+        <div class="modal-header">
+          <h5 class="modal-title w-100 text-center" id="modal-label">Search for an album</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Search bar -->
+          <div class="input-group">
+            <input type="text" class="form-control" id="modal-searchbar" placeholder="Search for an album/artist">
+            <button id="modal-search-btn" class="btn btn-primary" type="button">Search</button>
+          </div>
+          <div id="modal-grid" class="d-none"></div> 
+          <div id="modal-no-albums" class="d-none text-center mt-3">No albums with available covers found :(</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

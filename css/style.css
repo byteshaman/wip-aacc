@@ -1,14 +1,31 @@
-/* VARIABLES */
+/*! VARIABLES */
 :root {
   --rowNum: 0; 
   --colNum: 0;
   --imgSize: 0;
   --gutter: 0;
-  --maxChartSize: 600px;
+  --maxChartSize: 95%;
   --placeholderImg: url('img/placeholder.jpg');
+  --maxModalCells: 16;
+  --modalImgWidth: 100px;
 }
 
-/* ELEMENTS */
+/*! BS OVERRIDE */ 
+/* bigger switch */
+.form-switch .form-check-input {
+  width: 3rem;
+  height: 1.5rem;
+  margin-right: .5rem; /* increase distance between switch and text */
+  margin-top: 0; /* vertical align switch and text */
+}
+
+/* modal color */
+.modal-content.dark {
+  background-color: var(--bs-dark);
+}
+
+
+/*! ELEMENTS */
 body {
   background-color: #111;
   color: white;
@@ -27,12 +44,9 @@ button > span {
 #col-num, #row-num {
   width: 75px;
 }
-/* CLASSES */
 
-.bordered {
-  border: 2px solid;
-}
 
+/*! CLASSES */
 /* used to set the background image as the placeholder for all new elements */
 .placeholder {
   background-image: url('../img/placeholder.jpg');
@@ -47,34 +61,23 @@ button > span {
   width: auto;
 }
 
-/* colors */
-.chocolate{
-  border-color: chocolate;
+/*# borders */
+.border-full {
+  border: 2px solid;
 }
 
-.white  {
-  border-color: white;
+.border-bottom {
+  border-bottom: 2px solid;
 }
 
-.CornflowreBlue{
-  border-color: CornflowerBlue;
+.border-right {
+  border-right: 2px solid;
 }
 
-.DarkSalmon{
-  border-color: DarkSalmon;
+.white-border  {
+  border-color: #fff;
 }
 
-.DarkViolet{
-  border-color: DarkViolet;
-}
-
-.GoldenRod{
-  border-color: GoldenRod;
-}
-
-.LightCyan{
-  border-color: LightCyan;
-}
 
 /*! GRID SYSTEM */
 /* contains the title and options+chart */
@@ -92,6 +95,7 @@ button > span {
 #title {
   grid-area: title;
   text-align: center;
+  border-bottom: 2px solid #fff;
 }
 
 /* displayed on left/under the title based on the size of the screen */
@@ -100,6 +104,7 @@ button > span {
   grid-area: options;
   align-content: center;
   justify-items: center;
+  border-right: 2px solid #fff;
 }
 
 /* contains the chart */
@@ -107,19 +112,20 @@ button > span {
   display: grid;
   grid-area: chart;
   place-items: center; /* align-items + justify-items combination  */
+  overflow-y: auto; /* prevents the chart to overflow the body vertically */
 }
 
 /* contains the title of the chart and the album covers */
 #chart {
   display: grid;
-  max-width: var(--maxChartSize);;
-  max-height: var(--maxChartSize);;
-  margin: 50px 10px;
+  max-width: var(--maxChartSize);
+  max-height: var(--maxChartSize);
   background-repeat: no-repeat;
   grid-template-rows: auto 1fr;
   grid-template-areas: 
-    "title"
-    "covers";
+    "title title"
+    "covers sidetitles";
+  overflow-x: auto; /* prevents the chart to overflow the body horizontally */
 }
 
 #chart-title {
@@ -132,19 +138,33 @@ button > span {
   grid-area: covers;
   display: grid;
   gap: var(--gutter);
-  grid-template-rows: repeat(var(--rowNum), auto);
-  grid-template-columns: repeat(var(--colNum), auto);
+  grid-template-rows: repeat(var(--rowNum), 1fr);
+  grid-template-columns: repeat(var(--colNum), 1fr);
 }
 
-.chart-cell {
+/* area of the grid that will contain several divs, each of which will contain, for every column of the grid, the Artist - Album info of the corresponding cell */
+#side-titles {
+  grid-area: sidetitles;
   display: grid;
-  grid-template-rows: auto 1fr auto;
-  grid-template-areas: 
-    "rank"
-    "coverpic"
-    "title";
+  gap: var(--gutter);
+  grid-template-rows: repeat(var(--rowNum), 1fr);
 }
 
+/* contains the titles of the album on the side */
+.side-title-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* since the gap doesn't influence this area of the grid, use a fixed padding */
+  padding: 0 10px;
+  /* display long titles on the same line */
+  min-width: max-content;
+}
+.chart-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* centers the content vertically since the direction is column */
+}
 .cc-rank {
   grid-area: rank;
 }
@@ -152,15 +172,56 @@ button > span {
   grid-area: coverpic;
   width: var(--imgSize);
   height: var(--imgSize);
+  cursor: pointer;
+  margin: auto;
 }
 .cc-title {
   grid-area: title;
+  /* truncate the title if it's too long */
+  max-width: var(--imgSize);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/*# MODAL GRID */
+#modal-grid {
+  display: grid;
+  grid-template-columns: repeat(4,var(--modalImgWidth));
+  width: min-content;
+  margin: 20px auto;
+}
 
+.modal-cell {
+  position: relative;
+  cursor: pointer;
+}
 
-/* MEDIA QUERIES */
+.modal-cell-description {
+  --translate-value: 50%;
+  visibility: hidden;
+  position: absolute;
+  top: 0;  bottom: 0; left: var(--translate-value); right: 0;
+  text-align: center;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--modalImgWidth);
+  width: max-content;
+  /* left + translate allows to center the element on X axis using absolute positioning */
+  transform: translateX(calc(var(--translate-value)*-1));
+  pointer-events: none; /* prevents the visibility to persist when leaving the image */
+}
 
+.modal-cell:hover .modal-cell-description {
+  visibility: visible;
+  background: rgba(33, 37, 41, 0.9);
+  opacity: 1;
+  white-space: pre;
+}
+
+/*! MEDIA QUERIES */
 @media (max-width: 1024px) {
   #main-container {
     grid-template-rows: auto 3fr 7fr;
@@ -168,5 +229,10 @@ button > span {
       "title title"
       "options options"
       "chart chart";
+  }
+
+  #options-container {
+    border-bottom: 2px solid #fff;
+    border-right: none;
   }
 }
