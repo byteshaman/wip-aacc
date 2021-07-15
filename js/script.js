@@ -65,7 +65,7 @@ optionsContainer.addEventListener('input', e => {
   //title input
   if (elem === chartTitleInput) {
     options.setChartTitle(elem.value);
-    ls.set('chartTitle', title);
+    ls.set('chartTitle', elem.value);
   }
   //rank
   if (elem === rankSwitch) {
