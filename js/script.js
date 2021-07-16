@@ -220,8 +220,6 @@ modalGrid.addEventListener("click", e => {
   }
 })
 
-
-
 //! FUNCTIONS
 //# LOCALSTORAGE MANAGER
 const ls = {
@@ -597,7 +595,34 @@ const lastfm = {
   },
 }
 
+
+//!  FUNCTION CALLS
 general.setInitialValues();
 chartFuncs.generateInitialGrid();
 options.showHideRanks();
 options.showHideTitlesPositionOptions();
+
+
+
+// const width = Math.ceil(rectW.width);
+
+
+
+function downloadFile () {
+  const width = chartTitleDiv.getBoundingClientRect().width;
+  const height = chartTitleDiv.getBoundingClientRect().height + chartCovers.getBoundingClientRect().height;
+  console.log(width, height);
+
+  domtoimage.toJpeg(document.getElementById('chart'), {quality: 0.95, width: width, height: height})
+    .then((dataUrl) => {
+      const link = document.createElement('a');
+      link.download = 'chart.jpeg';
+      link.href = dataUrl;
+      link.click();
+    })
+    .catch(function (error) {
+      console.error('oops, something went wrong!', error);
+    });
+}
+
+document.querySelector('#download-btn').addEventListener('click', downloadFile);

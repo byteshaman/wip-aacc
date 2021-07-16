@@ -84,7 +84,7 @@ button > span {
 #main-container {
   display: grid;
   grid-template-columns: 3fr 7fr;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto minmax(500px, 1fr);
   grid-template-areas: 
     "title title"
     "options chart";
