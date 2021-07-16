@@ -609,11 +609,17 @@ options.showHideTitlesPositionOptions();
 
 
 function downloadFile () {
-  const width = chartTitleDiv.getBoundingClientRect().width;
-  const height = chartTitleDiv.getBoundingClientRect().height + chartCovers.getBoundingClientRect().height;
+  // const width = chartTitleDiv.getBoundingClientRect().width;
+  // const height = chartTitleDiv.getBoundingClientRect().height + chartCovers.getBoundingClientRect().height;
+
+
+  const width = chart.getBoundingClientRect().width;
+  const height = chart.getBoundingClientRect().height;
+
+
   console.log(width, height);
 
-  domtoimage.toJpeg(document.getElementById('chart'), {quality: 0.95, width: width, height: height})
+  domtoimage.toJpeg(document.getElementById('chart'), {quality: 1, width: width, height: height})
     .then((dataUrl) => {
       const link = document.createElement('a');
       link.download = 'chart.jpeg';

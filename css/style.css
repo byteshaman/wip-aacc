@@ -4,7 +4,6 @@
   --colNum: 0;
   --imgSize: 0;
   --gutter: 0;
-  --maxChartSize: 95%;
   --placeholderImg: url('img/placeholder.jpg');
   --maxModalCells: 16;
   --modalImgWidth: 100px;
@@ -112,20 +111,20 @@ button > span {
   display: grid;
   grid-area: chart;
   place-items: center; /* align-items + justify-items combination  */
-  overflow-y: auto; /* prevents the chart to overflow the body vertically */
+  overflow: auto; /* prevents the chart to overflow the body vertically */
+  
 }
 
 /* contains the title of the chart and the album covers */
 #chart {
   display: grid;
-  max-width: var(--maxChartSize);
-  max-height: var(--maxChartSize);
+  padding: 1rem;
   background-repeat: no-repeat;
   grid-template-rows: auto 1fr;
   grid-template-areas: 
     "title title"
     "covers sidetitles";
-  overflow-x: auto; /* prevents the chart to overflow the body horizontally */
+  /* overflow-x: auto; /* prevents the chart to overflow the body horizontally */
 }
 
 #chart-title {
@@ -231,8 +230,13 @@ button > span {
       "chart chart";
   }
 
+  #chart-container {
+    min-height: 600px;
+  }
+
   #options-container {
     border-bottom: 2px solid #fff;
     border-right: none;
+    padding: 1rem 0;
   }
 }
