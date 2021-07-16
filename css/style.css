@@ -24,6 +24,10 @@
   background-color: var(--bs-dark);
 }
 
+.form-label {
+  margin-bottom: 1px;
+}
+
 
 /*! ELEMENTS */
 body {
@@ -102,9 +106,10 @@ button > span {
 #options-container {
   display: grid;
   grid-area: options;
-  align-content: center;
+  align-content:flex-start;
   justify-items: center;
   border-right: 2px solid #fff;
+  padding-top: 1rem;
 }
 
 /* contains the chart */

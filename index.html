@@ -46,18 +46,22 @@
     </div>
     <div id="options-container">
       <!-- BUTTONS -->
-      <div class="mb-3 d-flex justify-content-center">
+      <div class="mb-2 d-flex justify-content-center"> 
         <button class="btn btn-primary" id="download-jpg-btn">Download JPG</button>
         <div class="mx-1"></div>
-        <button class="btn btn-secondary" id="download-json-btn">Download JSON</button>
-        <div class="mx-1"></div>
         <button class="btn btn-danger" id="reset-btn">Reset</button>
+      </div>
+      <div class="mb-2 d-flex justify-content-center"> 
+        <button class="btn btn-secondary" id="export-json-btn">Export JSON</button>
+        <div class="mx-1"></div>
+        <button class="btn btn-secondary" id="import-json-btn">Import JSON</button>
+        <input type="file" id="import-json-input" accept="application/json" class="d-none">
       </div>
 
 
       <form class="mx-3">
         <!-- IMAGE-BG -->
-        <div class="mb-3 text-center">
+        <div class="mb-2 text-center">
           <label for="bg-img-url-input" class="form-label text-center">BG image URL</label>
           <div class="input-group">
             <input type="url" class="form-control" id="bg-img-url-input">
@@ -69,7 +73,7 @@
         </div>
 
         <!-- BG & TEXT COLOR -->
-        <div class="input-group mb-3 d-flex justify-content-center" id="bgColorPicker">
+        <div class="input-group mb-2 d-flex justify-content-center" id="bgColorPicker">
           <span class="input-group-text" >BG color</span>
           <button id='bg-color-btn'></button>
           <button id='text-color-btn'></button>
@@ -80,7 +84,7 @@
         <div class="d-flex justify-content-center">
           Chart size:&nbsp;<span id="chart-size-row"></span>R x&nbsp;<span id="chart-size-col"></span>C
         </div>
-        <div class="d-flex justify-content-center mb-3">
+        <div class="d-flex justify-content-center mb-2">
           <div class="input-group flex-nowrap w-auto">
             <button id="row-num-btn-minus" class="btn btn-danger" type="button"><span class="oi"
                 data-glyph="minus"></span></button>
@@ -97,7 +101,7 @@
         </div>
 
         <!-- IMG SIZE && GUTTER -->
-        <div class="mb-3 text-center d-flex " id="imgsize-gutter-container">
+        <div class="mb-2 text-center d-flex " id="imgsize-gutter-container">
           <!-- IMG SIZE -->
           <div>
             <label for="img-size" class="form-label text-center">Image size (<span id="img-size-span"></span></label>px)
@@ -112,7 +116,7 @@
         </div>
 
         <!-- CHART TITLE -->
-        <div class="mb-3">
+        <div class="mb-2">
           <div class="input-group">
             <span class="input-group-text">Chart title</span>
             <input type="text" class="form-control" id="chart-title-input">

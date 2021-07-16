@@ -10,6 +10,11 @@ const colMinusBtn = document.querySelector('#col-num-btn-minus');
 const colNumInput = document.querySelector('#col-num');
 const colPlusBtn = document.querySelector('#col-num-btn-plus');
 const colNumSpan = document.querySelector('#chart-size-col');
+const downloadJPGBtn = document.querySelector('#download-jpg-btn');
+const exportJSONBtn = document.querySelector('#export-json-btn');
+const importJSONBtn = document.querySelector('#import-json-btn');
+const importJSONInput = document.querySelector('#import-json-input');
+const resetBtn = document.querySelector('#reset-btn');
 const gutterSlider = document.querySelector('#gutter');
 const imgSizeSlider = document.querySelector('#img-size');
 const lastfmAPIKey = "fc796a0c61cb69cccbaccb4706b597e4";
@@ -144,6 +149,22 @@ optionsContainer.addEventListener('click', e => {
     }
     options.showHideTitles();
   }
+  //download JPG button
+  if (elem === downloadJPGBtn) {
+    buttons.downloadChartAsJPG();
+  }
+  //export JSON button
+  if (elem === exportJSONBtn) {
+    buttons.exportChartAsJSON();
+  }
+  //import JSON button
+  if (elem === importJSONBtn) {
+    buttons.importChartFromJSON();
+  }
+  //reset btn
+  if (elem === resetBtn) {
+    buttons.reset();
+  }
 });
 
 //# DRAG&DROP EVENTS
@@ -238,6 +259,59 @@ const ls = {
   clear() {
     window.localStorage.clear();
   }
+}
+
+//# BUTTONS
+const buttons = {
+  downloadChartAsJPG() {
+    const width = chart.getBoundingClientRect().width;
+    const height = chart.getBoundingClientRect().height;
+    //console.log(width, height);
+
+    domtoimage.toJpeg(document.getElementById('chart'), { quality: 1, width: width, height: height })
+      .then((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = `${new Date().toISOString()}`;
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch(function (error) {
+        console.error('oops, something went wrong!', error);
+      });
+  },
+
+  exportChartAsJSON() {
+    const data = ls.get('grid');
+    if (data !== null) {
+      const filename = `${new Date().toISOString()}.json`;
+      const file = new Blob([data], {
+        type: 'application/json',
+        name: filename
+      });
+      saveAs(file,filename);
+    }
+  },
+
+  importChartFromJSON() {
+    importJSONInput.click();
+    
+    // try {
+    //   JSON.parse(chartJSON);
+    // } catch (e) {
+    //   alert('The provided file isn\' in a valid JSON format');
+    //   return;
+    // }
+    // ls.set('grid',chartJSON);
+    // location.reload();
+  },
+
+  reset() {
+    if (confirm('Are you sure? This will delete all the albums and saved options.')) {
+      ls.clear();
+      location.reload();
+    }
+  }
+
 }
 
 //# OPTIONS
@@ -621,36 +695,4 @@ chartFuncs.generateInitialGrid();
 chartFuncs.verticalCenterSideTitles();
 options.showHideRanks();
 options.showHideTitlesPositionOptions();
-options.setSpanText()
-
-
-
-// const width = Math.ceil(rectW.width);
-
-
-
-function downloadFile () {
-  // const width = chartTitleDiv.getBoundingClientRect().width;
-  // const height = chartTitleDiv.getBoundingClientRect().height + chartCovers.getBoundingClientRect().height;
-
-
-  const width = chart.getBoundingClientRect().width;
-  const height = chart.getBoundingClientRect().height;
-
-
-  console.log(width, height);
-
-  domtoimage.toJpeg(document.getElementById('chart'), {quality: 1, width: width, height: height})
-    .then((dataUrl) => {
-      const link = document.createElement('a');
-      link.download = 'chart.jpeg';
-      link.href = dataUrl;
-      link.click();
-    })
-    .catch(function (error) {
-      console.error('oops, something went wrong!', error);
-    });
-}
-
-document.querySelector('#download-jpg-btn').addEventListener('click', downloadFile);
-document.querySelector('#reset-btn').addEventListener('click', () => { ls.clear(); location.reload();});
+options.setSpanText();
