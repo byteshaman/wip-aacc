@@ -4,6 +4,7 @@
   --colNum: 0;
   --imgSize: 0;
   --gutter: 0;
+  --paddingTopSideTitles: 0;
   --placeholderImg: url('img/placeholder.jpg');
   --maxModalCells: 16;
   --modalImgWidth: 100px;
@@ -158,6 +159,8 @@ button > span {
   padding: 0 10px;
   /* display long titles on the same line */
   min-width: max-content;
+  /* padding top to center the text based on the image alone and not based on the image + rank text above it  */
+  padding-top: var(--paddingTopSideTitles);
 }
 .chart-cell {
   display: flex;

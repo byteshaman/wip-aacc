@@ -9,6 +9,7 @@ const chartCovers = document.querySelector('#chart-covers');
 const colMinusBtn = document.querySelector('#col-num-btn-minus');
 const colNumInput = document.querySelector('#col-num');
 const colPlusBtn = document.querySelector('#col-num-btn-plus');
+const colNumSpan = document.querySelector('#chart-size-col');
 const gutterSlider = document.querySelector('#gutter');
 const imgSizeSlider = document.querySelector('#img-size');
 const lastfmAPIKey = "fc796a0c61cb69cccbaccb4706b597e4";
@@ -24,6 +25,7 @@ const root = document.documentElement; //to manage CSS variables
 const rowMinusBtn = document.querySelector('#row-num-btn-minus');
 const rowNumInput = document.querySelector('#row-num');
 const rowPlusBtn = document.querySelector('#row-num-btn-plus');
+const rowNumSpan = document.querySelector('#chart-size-row');
 const sideTitles = document.querySelector('#side-titles');
 const titleSwitch = document.querySelector('#title-switch');
 const titlePositionOptions = document.querySelector('#title-position-options'); //div that contains the two radio
@@ -31,7 +33,7 @@ const titlePositionBelowRadio = document.querySelector('#title-below-radio');
 const titlePositionSideRadio = document.querySelector('#title-side-radio');
 
 
-let colNum, rowNum, imgSize, gutter;
+let colNum, rowNum, imgSize, gutter, paddingTopSideTitles;
 let rank = 1;
 let lastGridClickedImg; //contains the last clicked image that triggers the modal to open
 
@@ -118,10 +120,12 @@ optionsContainer.addEventListener('click', e => {
     ls.set('colNum', colNum);
     ls.set('rowNum', rowNum);
     chartFuncs.saveGridInfo();
+    options.setSpanText();
   }
   //rank
   if (elem === rankSwitch) {
     options.showHideRanks();
+    chartFuncs.verticalCenterSideTitles();
   };
   //title
   if (elem === titleSwitch) {
@@ -230,6 +234,10 @@ const ls = {
   get(key) {
     return window.localStorage.getItem(key);
   },
+
+  clear() {
+    window.localStorage.clear();
+  }
 }
 
 //# OPTIONS
@@ -241,6 +249,10 @@ const options = {
 
   setBgImage(url) {
     chart.style.backgroundImage = `url(${url})`;
+  },
+
+  setChartTitle(title) {
+    chartTitleDiv.textContent = title;
   },
 
   setGutter(gutter) {
@@ -264,8 +276,9 @@ const options = {
     ls.set('textColor', this.toHEXString());
   },
 
-  setChartTitle(title) {
-    chartTitleDiv.textContent = title;
+  setSpanText() {
+    rowNumSpan.textContent = rowNum;
+    colNumSpan.textContent = colNum;
   },
 
   repeatBgImage() {
@@ -434,6 +447,14 @@ const chartFuncs = {
       idx++;
     });
     ls.set('grid',JSON.stringify(obj))
+  },
+
+  //dinamically set the paddingTopSideTitles to vertically center the titles on the side with the image
+  verticalCenterSideTitles () {
+    //get the line height of body
+    const lineHeight = Number(window.getComputedStyle(document.body).getPropertyValue('line-height').match(/\d+/)[0]);
+    const paddingTopSideTitles = rankSwitch.checked ? lineHeight : 0 ;
+    general.setCSSVarPx('paddingTopSideTitles', paddingTopSideTitles);
   }
 }
 
@@ -515,15 +536,13 @@ const general = {
     }
     //! show titles
     titleSwitch.checked = ls.get('showTitles') == 'true' ? true : false;
-    if (ls.get('showTitlesSide') === undefined || ls.get('showTitlesSide') == 'false') {
+    if (ls.get('showTitlesSide') === null || ls.get('showTitlesSide') == 'false') {
       titlePositionBelowRadio.checked = true;
     }
     else {
       titlePositionSideRadio.checked = true;
     }
-    if (titleSwitch.checked) {
-      options.showHideTitles();
-    }
+
 
     //CSS
     this.setCSSVar('colNum',colNum);
@@ -599,8 +618,10 @@ const lastfm = {
 //!  FUNCTION CALLS
 general.setInitialValues();
 chartFuncs.generateInitialGrid();
+chartFuncs.verticalCenterSideTitles();
 options.showHideRanks();
 options.showHideTitlesPositionOptions();
+options.setSpanText()
 
 
 
@@ -631,4 +652,5 @@ function downloadFile () {
     });
 }
 
-document.querySelector('#download-btn').addEventListener('click', downloadFile);
+document.querySelector('#download-jpg-btn').addEventListener('click', downloadFile);
+document.querySelector('#reset-btn').addEventListener('click', () => { ls.clear(); location.reload();});
