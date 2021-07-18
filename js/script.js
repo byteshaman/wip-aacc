@@ -159,13 +159,21 @@ optionsContainer.addEventListener('click', e => {
   }
   //import JSON button
   if (elem === importJSONBtn) {
-    buttons.importChartFromJSON();
+    importJSONInput.click();
   }
   //reset btn
   if (elem === resetBtn) {
     buttons.reset();
   }
 });
+
+
+//# CHANGE EVENT
+importJSONInput.addEventListener('change', (e) => {
+  const fileList = e.target.files;
+  buttons.importChartFromJSON(fileList[0]);
+});
+
 
 //# DRAG&DROP EVENTS
 //the user starts dragging an item
@@ -261,6 +269,8 @@ const ls = {
   }
 }
 
+
+
 //# BUTTONS
 const buttons = {
   downloadChartAsJPG() {
@@ -292,8 +302,20 @@ const buttons = {
     }
   },
 
-  importChartFromJSON() {
-    importJSONInput.click();
+  importChartFromJSON(file) {
+    const reader = new FileReader();
+    reader.readAsText(file, "utf-8");
+
+    //load is triggered when the file has been read
+    reader.addEventListener("load", (e) => {
+      let tmp1 = e.target.result;
+      console.log(tmp1);
+   
+
+    });
+    
+
+
     
     // try {
     //   JSON.parse(chartJSON);
