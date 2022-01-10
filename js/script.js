@@ -72,6 +72,7 @@ optionsContainer.addEventListener('input', e => {
   //title input
   if (elem === chartTitleInput) {
     options.setChartTitle(elem.value);
+    options.setTitlePadding(elem.value);
     ls.set('chartTitle', elem.value);
   }
   //rank
@@ -170,8 +171,7 @@ optionsContainer.addEventListener('click', e => {
 
 //# CHANGE EVENT
 importJSONInput.addEventListener('change', (e) => {
-  const fileList = e.target.files;
-  buttons.importChartFromJSON(fileList[0]);
+  buttons.importChartFromJSON(e.target.files[0]); //first uploaded file
 });
 
 
@@ -269,19 +269,16 @@ const ls = {
   }
 }
 
-
-
 //# BUTTONS
 const buttons = {
   downloadChartAsJPG() {
     const width = chart.getBoundingClientRect().width;
     const height = chart.getBoundingClientRect().height;
-    //console.log(width, height);
 
     domtoimage.toJpeg(document.getElementById('chart'), { quality: 1, width: width, height: height })
       .then((dataUrl) => {
         const link = document.createElement('a');
-        link.download = `${new Date().toISOString()}`;
+        link.download = `${new Date().toISOString()}.jpg`;
         link.href = dataUrl;
         link.click();
       })
@@ -308,23 +305,16 @@ const buttons = {
 
     //load is triggered when the file has been read
     reader.addEventListener("load", (e) => {
-      let tmp1 = e.target.result;
-      console.log(tmp1);
-   
-
+      const content = e.target.result;
+      try {
+        JSON.parse(content);
+      } catch (e) {
+        alert('The provided file isn\'t in a valid JSON format');
+        return;
+      }
+      ls.set('grid',content);
+      location.reload();
     });
-    
-
-
-    
-    // try {
-    //   JSON.parse(chartJSON);
-    // } catch (e) {
-    //   alert('The provided file isn\' in a valid JSON format');
-    //   return;
-    // }
-    // ls.set('grid',chartJSON);
-    // location.reload();
   },
 
   reset() {
@@ -333,7 +323,6 @@ const buttons = {
       location.reload();
     }
   }
-
 }
 
 //# OPTIONS
@@ -370,6 +359,16 @@ const options = {
   setTextColor() {
     chart.style.color = this.toHEXString();
     ls.set('textColor', this.toHEXString());
+  },
+
+  setTitlePadding(str) {
+    //check if string is empty or contains only spaces
+    if (str.trim()) {
+      chartTitleDiv.classList.add('pb-3');
+    }
+    else {
+      chartTitleDiv.classList.remove('pb-3');
+    }
   },
 
   setSpanText() {
@@ -622,8 +621,10 @@ const general = {
     options.setGutterSpanText();
     //! chart title
     if (ls.get('chartTitle')) {
-      chartTitleInput.value = ls.get('chartTitle');
-      chartTitleDiv.textContent = ls.get('chartTitle');
+      const title = ls.get('chartTitle');
+      chartTitleInput.value = title;
+      options.setTitlePadding(title);
+      chartTitleDiv.textContent = title;
     }
     //! show ranks chk
     rankSwitch.checked = ls.get('showRanks') == 'true' ? true : false;
